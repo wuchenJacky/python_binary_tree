@@ -41,3 +41,4 @@ def AddMoney():
 print(Money)
 AddMoney()
 print(Money)
+pass
