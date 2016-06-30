@@ -10,3 +10,5 @@ print(items[2:10:2])
 print(items[::-1])
 
 print([x for x in range(6, 10)])
+pass
+print("123")
