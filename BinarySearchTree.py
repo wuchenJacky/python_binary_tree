@@ -60,3 +60,53 @@ class BinarySearchTree:
             return self._get(key, currentNode.leftChild)
         else:
             return self._get(key, currentNode.rightChild)
+
+    def delete(self, key):
+        if self.size > 1:
+            nodeToRemove = self._get(key, self.root)
+            if nodeToRemove:
+                self.remove(nodeToRemove)
+                self.size -= 1
+            else:
+                raise KeyError('Error , key not in tree')
+        elif self.size == 1 and self.root.key == key:
+            self.root = None
+            self.size = 0
+        else:
+            raise KeyError("Error , key not in tree")
+
+    def __delitem__(self, key):
+        self.delete(key)
+
+    def remove(self, currentNode):
+        if currentNode.isLeaf():
+            if currentNode == currentNode.parent.leftChild:
+                currentNode.parent.leftChild = None
+            else:
+                currentNode.parent.rightChild = None
+        elif currentNode.hasBothChildren():  # 如果有2个子节点
+            succ = currentNode.findSuccessor()
+            succ.splicOut()
+            currentNode.key = succ.key
+            currentNode.payload = succ.payload
+        else:  # this node has one child
+            if currentNode.hasLeftChild():
+                if currentNode.isLeftChild():
+                    currentNode.leftChild.parent = currentNode.parent
+                    currentNode.parent.leftChild = currentNode.leftChild
+                elif currentNode.isRightChild():
+                    currentNode.leftChild.parent = currentNode.parent
+                    currentNode.parent.rightChild = currentNode.leftChild
+                else:
+                    currentNode.replaceNodeData(currentNode.leftChild.key, currentNode.leftChild.payload,
+                                                currentNode.leftChild.leftChild, currentNode.leftChild.rightChild)
+            else:
+                if currentNode.isLeftChild():
+                    currentNode.rightChild.parent = currentNode.parent
+                    currentNode.parent.leftChild = currentNode.rightChild
+                elif currentNode.isRightChild():
+                    currentNode.rightChild.parent = currentNode.parent
+                    currentNode.parent.rightChild = currentNode.rightChild
+                else:
+                    currentNode.replaceNodeData(currentNode.rightChild.key, currentNode.rightChild.payload,
+                                                currentNode.rightChild.leftChild, currentNode.rightChild.rightChild)
