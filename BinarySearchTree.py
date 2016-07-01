@@ -79,14 +79,14 @@ class BinarySearchTree:
         self.delete(key)
 
     def remove(self, currentNode):
-        if currentNode.isLeaf():
+        if currentNode.isLeaf():  # 如果节点不包含子节点
             if currentNode == currentNode.parent.leftChild:
                 currentNode.parent.leftChild = None
             else:
                 currentNode.parent.rightChild = None
         elif currentNode.hasBothChildren():  # 如果有2个子节点
-            succ = currentNode.findSuccessor()
-            succ.splicOut()
+            succ = currentNode.findSuccessor()   # 找到最小节点
+            succ.splicOut()     # 设置节点为Node
             currentNode.key = succ.key
             currentNode.payload = succ.payload
         else:  # this node has one child
